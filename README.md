@@ -5,7 +5,7 @@
 
 - 🔭 I’m currently working on **Nowhere**
 
-- 🌱 I’m currently learning **Javascript, mysql, mongoDB, GML, PHP, Python**
+- 🌱 I’m currently learning **Javascript, mysql, GML, PHP, Python**
 
 - 📫 How to reach me **nicolasgustavogt@gmail.com**
 
