@@ -33,7 +33,13 @@
    ##
  
 <div> 
- <img alt="X (Twitter) URL" src="https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FOhNickConte&style=for-the-badge&logo=x&label=Twitter&color=555555">
- <a href = "mailto:nicolascontegt@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white&color=red" target="_blank"></a>
- <a href="https://www.linkedin.com/in/nicolasgconteti/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a> 
+ <a href="https://twitter.com/OhNickConte" target="_blank">
+  <img alt="X (Twitter) URL" src="https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FOhNickConte&style=for-the-badge&logo=x&label=Twitter&color=555555" target="_blank">
+ </a>
+ <a href="mailto:nicolascontegt@gmail.com">
+  <img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white&color=red" target="_blank">
+ </a>
+ <a href="https://www.linkedin.com/in/nicolasgconteti/" target="_blank">
+  <img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank">
+ </a> 
 </div>
