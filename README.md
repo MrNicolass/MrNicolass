@@ -4,8 +4,8 @@
 </div>
 
 <div style="display: flex; justify-content: center; align-items: center;">
- <img height="188em" src="https://github-readme-stats.vercel.app/api?username=MrNicolass&show_icons=true&theme=dracula&include_all_commits=true&count_private=true">
- <img height="188em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MrNicolass&layout=compact&theme=dracula"/>
+ <img height="170em" src="https://github-readme-stats.vercel.app/api?username=MrNicolass&show_icons=true&theme=dracula&include_all_commits=true&count_private=true">
+ <img height="170em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MrNicolass&layout=compact&theme=dracula"/>
 </div>
 
 <h3>Languages and Tools:</h3>
