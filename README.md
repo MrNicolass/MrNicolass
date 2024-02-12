@@ -4,9 +4,9 @@
 </div>
 
 <div style="display: flex; justify-content: center; align-items: center;">
- <img height="165em" src="https://github-readme-stats-kappa-three-49.vercel.app/api?username=MrNicolass&show_icons=true&theme=transparent&include_all_commits=true">
+ <img height="165em" src="https://github-readme-stats-kappa-three-49.vercel.app/api?username=MrNicolass&show_icons=true&theme=transparent&include_all_commits=true&custom_title=My&nbsp;GitHub&nbsp;Stats">
  <img height="165em" src="https://github-readme-stats-kappa-three-49.vercel.app/api/top-langs/?username=MrNicolass&layout=compact&theme=transparent"/>
- <img height="163em" src="https://github-readme-stats.vercel.app/api/wakatime?username=@LoneWoIf&layout=compact&&theme=transparent"/>
+ <img height="163em" src="https://github-readme-stats.vercel.app/api/wakatime?username=@LoneWoIf&layout=compact&theme=transparent&custom_title=Most&nbsp;Recently&nbsp;Used&nbsp;Languages"/>
 </div>
 
 <h3>Languages and Tools:</h3>
