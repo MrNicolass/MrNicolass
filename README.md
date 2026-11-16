@@ -6,7 +6,6 @@
 <div align="center">
  <img height="165em" src="https://github-readme-stats-kappa-three-49.vercel.app/api?username=MrNicolass&show_icons=true&theme=transparent&include_all_commits=true&custom_title=My&nbsp;GitHub&nbsp;Stats">
  <img height="165em" src="https://github-readme-stats-kappa-three-49.vercel.app/api/top-langs/?username=MrNicolass&layout=compact&theme=transparent"/>
- <img height="163em" src="https://github-readme-stats.vercel.app/api/wakatime?username=@LoneWoIf&layout=compact&theme=transparent&custom_title=Most&nbsp;Recently&nbsp;Used&nbsp;Languages"/>
 </div>
 
 <h3>Languages and Tools:</h3>
@@ -34,9 +33,6 @@
    ##
  
 <div> 
- <a href="https://twitter.com/OhNickConte" target="_blank">
-  <img alt="X (Twitter) URL" src="https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FOhNickConte&style=for-the-badge&logo=x&label=Twitter&color=555555" target="_blank">
- </a>
  <a href="mailto:nicolascontegt@gmail.com">
   <img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white&color=red" target="_blank">
  </a>
