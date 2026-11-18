@@ -97,26 +97,40 @@ def call(token, url, body=None):
 
 
 def graphql(token, query, **variables):
+    """The user object. Fields the token may not read (private repositories seen through
+    GITHUB_TOKEN, for one) come back as null with an error; those count as 0 instead of failing."""
     data = call(token, "https://api.github.com/graphql", {"query": query, "variables": variables})
-    if data.get("errors") or not (data.get("data") or {}).get("user"):
+    user = (data.get("data") or {}).get("user")
+    if not user:
         raise SystemExit(f"GraphQL error: {data.get('errors') or 'user not found'}")
-    return data["data"]["user"]
+    if data.get("errors"):
+        print(f"note: {len(data['errors'])} fields are not readable with this token and count as 0 "
+              f"({data['errors'][0].get('message')})")
+    return user
+
+
+def count(obj, key):
+    return ((obj or {}).get(key) or {}).get("totalCount", 0)
 
 
 def fetch(login: str, token: str, top: int = 6) -> dict:
     u = graphql(token, USER_QUERY, login=login)
-    cc = u["contributionsCollection"]
+    cc = u.get("contributionsCollection") or {}
 
-    stars, sizes, after = 0, {}, None
+    stars, sizes, repos, after = 0, {}, 0, None
     for _ in range(10):  # up to 1000 repositories
         page = graphql(token, REPOS_QUERY, login=login, after=after)["repositories"]
         for repo in page["nodes"]:
-            stars += repo["stargazers"]["totalCount"]
-            for edge in repo["languages"]["edges"]:
+            if not repo:
+                continue
+            repos += 1
+            stars += count(repo, "stargazers")
+            for edge in (repo.get("languages") or {}).get("edges") or []:
                 sizes[edge["node"]["name"]] = sizes.get(edge["node"]["name"], 0) + edge["size"]
         if not page["pageInfo"]["hasNextPage"]:
             break
         after = page["pageInfo"]["endCursor"]
+    print(f"{repos} repositories read, {len(sizes)} languages found")
     best = sorted(sizes.items(), key=lambda kv: -kv[1])[:top]
     total = sum(s for _, s in best) or 1
 
@@ -124,16 +138,16 @@ def fetch(login: str, token: str, top: int = 6) -> dict:
         commits = call(token, f"https://api.github.com/search/commits?q=author:{login}&per_page=1")["total_count"]
     except Exception as err:  # rate limit or search outage: fall back to the last year
         print(f"commit search failed ({err}); using last year's commits")
-        commits = cc["totalCommitContributions"] + cc["restrictedContributionsCount"]
+        commits = cc.get("totalCommitContributions", 0) + cc.get("restrictedContributionsCount", 0)
 
     return {
         "stars": stars,
         "commits": commits,
-        "prs": u["pullRequests"]["totalCount"],
-        "issues": u["openIssues"]["totalCount"] + u["closedIssues"]["totalCount"],
-        "contrib": u["repositoriesContributedTo"]["totalCount"],
-        "reviews": cc["totalPullRequestReviewContributions"],
-        "followers": u["followers"]["totalCount"],
+        "prs": count(u, "pullRequests"),
+        "issues": count(u, "openIssues") + count(u, "closedIssues"),
+        "contrib": count(u, "repositoriesContributedTo"),
+        "reviews": cc.get("totalPullRequestReviewContributions", 0),
+        "followers": count(u, "followers"),
         "langs": [[name, round(size * 100 / total, 2)] for name, size in best],
     }
 
