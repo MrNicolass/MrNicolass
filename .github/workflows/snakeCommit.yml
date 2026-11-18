@@ -23,6 +23,10 @@ jobs:
     timeout-minutes: 5
     
     steps:
+      # needed to run scripts/build_runner.py below
+      - name: check out the repository
+        uses: actions/checkout@v4
+
       # generates a snake game from a github user (<github_user_name>) contributions graph, output a svg animation at <svg_out_path>
       - name: generate github-contribution-grid-snake.svg
         uses: Platane/snk/svg-only@v3
@@ -31,8 +35,16 @@ jobs:
           outputs: |
             dist/github-contribution-grid-snake.svg
             dist/github-contribution-grid-snake-dark.svg?palette=github-dark
-          
-          
+
+      # pixel-art board: a toadstool and three mini toadstools run over the contribution calendar
+      # writes dist/wonderland-run-dark.svg and dist/wonderland-run-light.svg (standard library only, no install step)
+      # continue-on-error keeps the snake published even if the GraphQL call fails
+      - name: generate wonderland-run svgs
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/build_runner.py --user "${{ github.repository_owner }}" --out dist
+
       # push the content of <build_dir> to a branch
       # the content will be available at https://raw.githubusercontent.com/<github_user>/<repository>/<target_branch>/<file> , or as github page
       - name: push github-contribution-grid-snake.svg to the output branch
