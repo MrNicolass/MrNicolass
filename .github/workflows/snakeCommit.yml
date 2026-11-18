@@ -9,11 +9,9 @@ on:
   workflow_dispatch:
   
   # run on every push on the main branch
-  # readme-pixel is the preview branch: running here publishes the images its README points to (remove it after merging)
   push:
     branches:
     - main
-    - readme-pixel
     
   
 

@@ -229,13 +229,9 @@ def cells_of(cal: dict):
 
 
 def route(cells, ncols):
-    """Up the odd columns, down the even ones, one adjacent day at a time."""
-    out = []
-    for c in range(ncols):
-        for r in (range(7) if c % 2 == 0 else range(6, -1, -1)):
-            if (c, r) in cells:
-                out.append((c, r))
-    return out
+    """Left to right along each row, rows from top to bottom. At the end of a row the train
+    wraps around to the left edge of the next one, like a typewriter carriage return."""
+    return [(c, r) for r in range(7) for c in range(ncols) if (c, r) in cells]
 
 
 # ---------------------------------------------------------------- sprites
