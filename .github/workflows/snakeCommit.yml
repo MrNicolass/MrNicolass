@@ -45,6 +45,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 scripts/build_runner.py --user "${{ github.repository_owner }}" --out dist
 
+      # pixel-art cards: stats-{dark,light}.svg (numbers and rank) and langs-{dark,light}.svg (top languages)
+      # same numbers and rank formula as github-readme-stats; add a STATS_TOKEN secret (personal access token) to also count private repositories
+      - name: generate stats svgs
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
+        run: python3 scripts/build_stats.py --user "${{ github.repository_owner }}" --out dist
+
       # push the content of <build_dir> to a branch
       # the content will be available at https://raw.githubusercontent.com/<github_user>/<repository>/<target_branch>/<file> , or as github page
       - name: push github-contribution-grid-snake.svg to the output branch
