@@ -7,56 +7,48 @@
 
 <h3><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/heading-stack-dark.svg"><img src="./assets/heading-stack-light.svg" width="100%" alt="02 Stack"></picture></h3>
 
-<table width="100%">
-  <tr>
-    <td>
-      <b>languages</b><br />
-      <img src="https://img.shields.io/badge/-Java-111?style=flat-square&logo=openjdk&logoColor=ED8B00" alt="Java"/>
-      <img src="https://img.shields.io/badge/-TypeScript-111?style=flat-square&logo=typescript&logoColor=3178C6" alt="TypeScript"/>
-      <img src="https://img.shields.io/badge/-JavaScript-111?style=flat-square&logo=javascript&logoColor=F7DF1E" alt="JavaScript"/>
-      <img src="https://img.shields.io/badge/-Python-111?style=flat-square&logo=python&logoColor=FFDE57" alt="Python"/>
-      <img src="https://img.shields.io/badge/-GML-111?style=flat-square&logo=gamemaker&logoColor=ffffff" alt="GML"/>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <b>frontend</b><br />
-      <img src="https://img.shields.io/badge/-React-111?style=flat-square&logo=react&logoColor=61DAFB" alt="React"/>
-      <img src="https://img.shields.io/badge/-Next.js-111?style=flat-square&logo=nextdotjs&logoColor=ffffff" alt="Next.js"/>
-      <img src="https://img.shields.io/badge/-Tailwind-111?style=flat-square&logo=tailwindcss&logoColor=06B6D4" alt="Tailwind CSS"/>
-      <img src="https://img.shields.io/badge/-HTML5-111?style=flat-square&logo=html5&logoColor=E34F26" alt="HTML5"/>
-      <img src="https://img.shields.io/badge/-CSS-111?style=flat-square&logo=css&logoColor=1572B6" alt="CSS"/>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <b>backend</b><br />
-      <img src="https://img.shields.io/badge/-Spring%20Boot-111?style=flat-square&logo=springboot&logoColor=6DB33F" alt="Spring Boot"/>
-      <img src="https://img.shields.io/badge/-Quarkus-111?style=flat-square&logo=quarkus&logoColor=4695EB" alt="Quarkus"/>
-      <img src="https://img.shields.io/badge/-Node.js-111?style=flat-square&logo=nodedotjs&logoColor=5FA04E" alt="Node.js"/>
-      <img src="https://img.shields.io/badge/-PostgreSQL-111?style=flat-square&logo=postgresql&logoColor=4169E1" alt="PostgreSQL"/>
-      <img src="https://img.shields.io/badge/-MySQL-111?style=flat-square&logo=mysql&logoColor=4479A1" alt="MySQL"/>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <b>tools</b><br />
-      <img src="https://img.shields.io/badge/-Git-111?style=flat-square&logo=git&logoColor=F05032" alt="Git"/>
-      <img src="https://img.shields.io/badge/-GitHub-111?style=flat-square&logo=github&logoColor=ffffff" alt="GitHub"/>
-      <img src="https://img.shields.io/badge/-GitLab-111?style=flat-square&logo=gitlab&logoColor=FC6D26" alt="GitLab"/>
-      <img src="https://img.shields.io/badge/-GitHub%20Actions-111?style=flat-square&logo=githubactions&logoColor=2088FF" alt="GitHub Actions"/>
-      <img src="https://img.shields.io/badge/-Docker-111?style=flat-square&logo=docker&logoColor=2496ED" alt="Docker"/>
-      <img src="https://img.shields.io/badge/-Vercel-111?style=flat-square&logo=vercel&logoColor=ffffff" alt="Vercel"/>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <b>desktop / ai</b><br />
-      <img src="https://img.shields.io/badge/-PySide6-111?style=flat-square&logo=qt&logoColor=41CD52" alt="PySide6"/>
-      <img src="https://img.shields.io/badge/-llama.cpp-111?style=flat-square" alt="llama.cpp"/>
-    </td>
-  </tr>
-</table>
+<p>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/stack-languages-dark.svg"><img src="./assets/stack-languages-light.svg" alt="languages"></picture>
+  <img src="https://img.shields.io/badge/-Java-1b1646?style=flat-square&logo=openjdk&logoColor=ED8B00" alt="Java"/>
+  <img src="https://img.shields.io/badge/-TypeScript-1b1646?style=flat-square&logo=typescript&logoColor=3178C6" alt="TypeScript"/>
+  <img src="https://img.shields.io/badge/-JavaScript-1b1646?style=flat-square&logo=javascript&logoColor=F7DF1E" alt="JavaScript"/>
+  <img src="https://img.shields.io/badge/-Python-1b1646?style=flat-square&logo=python&logoColor=FFDE57" alt="Python"/>
+  <img src="https://img.shields.io/badge/-GML-1b1646?style=flat-square&logo=gamemaker&logoColor=ffffff" alt="GML"/>
+</p>
+
+<p>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/stack-frontend-dark.svg"><img src="./assets/stack-frontend-light.svg" alt="frontend"></picture>
+  <img src="https://img.shields.io/badge/-React-1b1646?style=flat-square&logo=react&logoColor=61DAFB" alt="React"/>
+  <img src="https://img.shields.io/badge/-Next.js-1b1646?style=flat-square&logo=nextdotjs&logoColor=ffffff" alt="Next.js"/>
+  <img src="https://img.shields.io/badge/-Tailwind-1b1646?style=flat-square&logo=tailwindcss&logoColor=06B6D4" alt="Tailwind CSS"/>
+  <img src="https://img.shields.io/badge/-HTML5-1b1646?style=flat-square&logo=html5&logoColor=E34F26" alt="HTML5"/>
+  <img src="https://img.shields.io/badge/-CSS-1b1646?style=flat-square&logo=css&logoColor=1572B6" alt="CSS"/>
+</p>
+
+<p>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/stack-backend-dark.svg"><img src="./assets/stack-backend-light.svg" alt="backend"></picture>
+  <img src="https://img.shields.io/badge/-Spring%20Boot-1b1646?style=flat-square&logo=springboot&logoColor=6DB33F" alt="Spring Boot"/>
+  <img src="https://img.shields.io/badge/-Quarkus-1b1646?style=flat-square&logo=quarkus&logoColor=4695EB" alt="Quarkus"/>
+  <img src="https://img.shields.io/badge/-Node.js-1b1646?style=flat-square&logo=nodedotjs&logoColor=5FA04E" alt="Node.js"/>
+  <img src="https://img.shields.io/badge/-PostgreSQL-1b1646?style=flat-square&logo=postgresql&logoColor=4169E1" alt="PostgreSQL"/>
+  <img src="https://img.shields.io/badge/-MySQL-1b1646?style=flat-square&logo=mysql&logoColor=4479A1" alt="MySQL"/>
+</p>
+
+<p>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/stack-tools-dark.svg"><img src="./assets/stack-tools-light.svg" alt="tools"></picture>
+  <img src="https://img.shields.io/badge/-Git-1b1646?style=flat-square&logo=git&logoColor=F05032" alt="Git"/>
+  <img src="https://img.shields.io/badge/-GitHub-1b1646?style=flat-square&logo=github&logoColor=ffffff" alt="GitHub"/>
+  <img src="https://img.shields.io/badge/-GitLab-1b1646?style=flat-square&logo=gitlab&logoColor=FC6D26" alt="GitLab"/>
+  <img src="https://img.shields.io/badge/-GitHub%20Actions-1b1646?style=flat-square&logo=githubactions&logoColor=2088FF" alt="GitHub Actions"/>
+  <img src="https://img.shields.io/badge/-Docker-1b1646?style=flat-square&logo=docker&logoColor=2496ED" alt="Docker"/>
+  <img src="https://img.shields.io/badge/-Vercel-1b1646?style=flat-square&logo=vercel&logoColor=ffffff" alt="Vercel"/>
+</p>
+
+<p>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/stack-desktop-ai-dark.svg"><img src="./assets/stack-desktop-ai-light.svg" alt="desktop / ai"></picture>
+  <img src="https://img.shields.io/badge/-PySide6-1b1646?style=flat-square&logo=qt&logoColor=41CD52" alt="PySide6"/>
+  <img src="https://img.shields.io/badge/-llama.cpp-1b1646?style=flat-square" alt="llama.cpp"/>
+</p>
 
 <h3><picture><source media="(prefers-color-scheme: dark)" srcset="./assets/heading-activity-dark.svg"><img src="./assets/heading-activity-light.svg" width="100%" alt="03 Activity"></picture></h3>
 

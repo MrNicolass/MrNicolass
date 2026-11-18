@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the profile README panels: hero card, project tiles, headings and buttons.
+"""Generate the profile README panels: hero card, project tiles, headings, stack labels and buttons.
 
 GitHub strips CSS from READMEs, so every styled panel is an SVG image. Each panel is
 written twice (dark and light) and README.md picks one with <picture> and
@@ -13,6 +13,7 @@ Setup (one time):
 
 Usage:
     python scripts/build_assets.py       # or: GEIST_DIR=/path/to/geist/dist/fonts python ...
+    (it imports scripts/build_runner.py for the 3x5 pixel font, so run it from a normal checkout)
 
 Edit the DATA section, run the script and commit the files in assets/.
 """
@@ -20,6 +21,7 @@ Edit the DATA section, run the script and commit the files in assets/.
 import base64
 import io
 import os
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -27,6 +29,9 @@ from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.pens.transformPen import TransformPen
 from fontTools.ttLib import TTFont
 from PIL import Image
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from build_runner import text as pixel_text, text_w as pixel_text_w  # built-in 3x5 pixel font
 
 ROOT = Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "assets"
@@ -72,6 +77,10 @@ TILES = [
         "seed": 23,
     },
 ]
+
+# One pixel label per row of the stack section; the badges next to it are shields.io images in README.md.
+STACK_ROWS = [("languages", "LANGUAGES", "code"), ("frontend", "FRONTEND", "window"), ("backend", "BACKEND", "server"),
+              ("tools", "TOOLS", "prompt"), ("desktop-ai", "DESKTOP/AI", "chip")]
 
 HEADINGS = [("projects", "PROJECTS"), ("stack", "STACK"), ("activity", "ACTIVITY"), ("contact", "CONTACT")]
 
@@ -533,6 +542,33 @@ def icon_cells(kind, n=13):
     return cells
 
 
+STACK_ICONS = {  # 9 x 7 pixels, original generic glyphs
+    "code": [".....X...", "..X..XX..", ".X..X..X.", "X...X...X", ".X..X..X.", "..XX..X..", "...X....."],
+    "window": ["XXXXXXXXX", "X.......X", "XXXXXXXXX", "X.......X", "X.XXX...X", "X.......X", "XXXXXXXXX"],
+    "server": ["XXXXXXXXX", "X.....X.X", "XXXXXXXXX", ".........", "XXXXXXXXX", "X.....X.X", "XXXXXXXXX"],
+    "prompt": [".........", "X........", ".X.......", "..X......", ".X.......", "X..XXXXX.", "........."],
+    "chip": [".X.X.X.X.", "XXXXXXXXX", "X.......X", "X..XXX..X", "X.......X", "XXXXXXXXX", ".X.X.X.X."],
+}
+
+
+def stack_chip(label, icon, theme):
+    """A 20px tall pixel tag (same height as a flat-square badge) that sits at the start of a badge row."""
+    t = THEMES[theme]
+    w, h, n = 132, 20, 2
+    shade = t["ramps"]["violet"][2] if theme == "dark" else "#5a32a3"
+
+    def shape(height):
+        return f"M{n} 0H{w - n}V{n}H{w}V{height - n}H{w - n}V{height}H{n}V{height - n}H0V{n}H{n}Z"
+
+    cells = {(x, y) for y, row in enumerate(STACK_ICONS[icon]) for x, ch in enumerate(row) if ch == "X"}
+    body = (
+        f'<path d="{shape(h)}" fill="{shade}"/><path d="{shape(h - 2)}" fill="{t["accent"]}"/>'
+        + rects(cells, 2, 9, 2, t["on_accent"])
+        + pixel_text(label, 36, 4, 2, t["on_accent"])
+    )
+    return svg(w, h, "", body, label.title())
+
+
 def heading(label, index, theme, f):
     t = THEMES[theme]
     w, h = 880, 44
@@ -595,6 +631,8 @@ def main():
             out[f"tile-{spec['slug']}-{theme}.svg"] = tile(spec, theme, edges, f)
         for i, (slug, label) in enumerate(HEADINGS):
             out[f"heading-{slug}-{theme}.svg"] = heading(label, f"{i + 1:02d}", theme, f)
+        for slug, label, icon in STACK_ROWS:
+            out[f"stack-{slug}-{theme}.svg"] = stack_chip(label, icon, theme)
         for spec in BUTTONS:
             out[f"btn-{spec[0]}-{theme}.svg"] = button(spec, theme, f)
         for name, content in out.items():
