@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Pixel-art game board for the profile.
 
-A small toadstool runs across your GitHub contribution calendar, followed by
-three mini toadstools in a row. Every day it steps on is collected and added to
+A small white kitten runs across your GitHub contribution calendar, followed by
+three mini kittens in a row. Every day it steps on is collected and added to
 a score in the title bar; when the board is empty the loop starts again.
 
 The calendar comes from the GitHub GraphQL API and the output is two animated
@@ -19,7 +19,7 @@ Notes
   in lock-step. SMIL silently drops an animation whose first keyTime is not 0
   or whose lists differ in length; validate() rejects both.
 - The four characters are pixel grids in LEADER / MINI below. Edit the rows to
-  redraw them (any non-"." letter is a colour key, see PALETTE).
+  redraw them: W fur, e eyes, n nose, c collar; the outline is added automatically.
 """
 
 from __future__ import annotations
@@ -48,10 +48,9 @@ THEMES = {
         "accent": "#a371f7",
         "bar": ["#43299b", "#8957e5", "#d6c2ff"],  # the three title-bar squares
         "levels": ["#151a21", "#33276f", "#5b3cc4", "#8957e5", "#d6c2ff"],  # empty .. busiest day
-        "palette": {  # sprite colour keys
-            "C": "#f0883e", "c": "#8a3a14", "S": "#ffd7a8", "T": "#c8cdee", "L": "#8b93bd",
-            "v": "#8957e5", "V": "#43299b", "b": "#388bfd", "B": "#173f7d", "l": "#d6c2ff", "k": "#8b93bd",
-            "s": "#e6edf3",
+        "palette": {  # sprite colours: W fur, o outline, e eye, n nose, C/v/b/l collars
+            "W": "#f4f6ff", "o": "#6b739f", "e": "#161a33", "n": "#ff8fb1",
+            "C": "#f0883e", "v": "#8957e5", "b": "#388bfd", "l": "#d6c2ff",
         },
     },
     "light": {
@@ -64,35 +63,34 @@ THEMES = {
         "bar": ["#cbb2ff", "#a371f7", "#6a3fd1"],
         "levels": ["#e4e8ed", "#e0d3ff", "#c3a8ff", "#9a6df0", "#6a3fd1"],
         "palette": {
-            "C": "#f0883e", "c": "#b9470a", "S": "#ffe3d0", "T": "#8f98c4", "L": "#4b547f",
-            "v": "#8250df", "V": "#5a32a3", "b": "#0969da", "B": "#0a3069", "l": "#c8a9ff", "k": "#8250df",
-            "s": "#ffffff",
+            "W": "#ffffff", "o": "#2f3556", "e": "#161a33", "n": "#ff7ea3",
+            "C": "#f0883e", "v": "#8250df", "b": "#0969da", "l": "#c8a9ff",
         },
     },
 }
 
 # ---------------------------------------------------------------- characters (original pixel art)
-# C cap, c cap rim, S spot, T stem, L legs. The minis swap C/c for their own colour keys.
+# W fur, e eyes, n nose, c collar. The outline is added around the silhouette automatically.
 LEADER = [
-    "..CCCC..",
-    ".CCSCCC.",
-    "CCCCCSCC",
-    "CSCCCCCC",
-    "cccccccc",
-    "..TTTT..",
-    "..TTTT..",
+    "W.....W",
+    "WWWWWWW",
+    "WeWWWeW",
+    "WWWnWWW",
+    ".WWWWW.",
+    ".ccccc.",
+    ".WWWWW.",
 ]
-LEADER_LEGS = ["..L..L..", "...LL..."]  # two walk frames, 1 row each
+LEADER_LEGS = [".W...W.", "..WWW.."]  # two walk frames, 1 row each
 MINI = [
-    ".CCCC.",
-    "CCSCCC",
-    "cccccc",
-    "..TT..",
-    "..TT..",
+    "W...W",
+    "WWWWW",
+    "WeWeW",
+    ".WnW.",
+    ".ccc.",
 ]
-MINI_LEGS = [".L..L.", "..LL.."]
-# (cap key, rim key, spot key) for the three followers, in order behind the leader
-FOLLOWERS = [("v", "V", "s"), ("b", "B", "s"), ("l", "k", "s")]
+MINI_LEGS = [".W.W.", ".WWW."]
+LEADER_COLLAR = "C"  # ember
+FOLLOWER_COLLARS = ["v", "b", "l"]  # violet, blue, lilac, in order behind the leader
 
 # ---------------------------------------------------------------- timing and geometry
 STEP = 0.075  # seconds to cross one day
@@ -245,26 +243,35 @@ def dilate(cells):
     return {(x + dx, y + dy) for x, y in cells for dx in (-1, 0, 1) for dy in (-1, 0, 1)}
 
 
-def key_cells(rows, key):
-    return {(x, y) for y, row in enumerate(rows) for x, ch in enumerate(row) if ch == key}
+def frame_cells(body, legs):
+    """Body + one leg row as {(x, y): key}, wrapped in a 1-pixel outline and shifted to start at (0, 0)."""
+    cells = {(x, y): ch for y, row in enumerate(body + [legs]) for x, ch in enumerate(row) if ch != "."}
+    out = dict(cells)
+    for x, y in cells:
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            out.setdefault((x + dx, y + dy), "o")
+    return {(x + 1, y + 1): k for (x, y), k in out.items()}
 
 
-def sprite(body, legs, swap, t):
-    """One character as a <g> with its halo, body colours and two walk frames (no motion yet)."""
+def sprite(body, legs, collar, t):
+    """A kitten as SVG parts plus its size in px: a halo, then two walk frames that swap every 0.15 s."""
     pal = t["palette"]
-    swap = {"C": swap[0], "c": swap[1], "S": swap[2]} if swap else {}
-    rows = len(body)
-    body_cells = {(x, y) for y, row in enumerate(body) for x, ch in enumerate(row) if ch != "."}
-    leg_cells = [{(x, rows + y) for y, row in enumerate([lg]) for x, ch in enumerate(row) if ch != "."} for lg in legs]
-    halo = dilate(body_cells | leg_cells[0] | leg_cells[1])
-    parts = [f'<path d="{path_d(halo, 0, 0, U)}" fill="{t["card"]}"/>']
-    for key in sorted({ch for row in body for ch in row} - {"."}):
-        parts.append(f'<path d="{path_d(key_cells(body, key), 0, 0, U)}" fill="{pal[swap.get(key, key)]}"/>')
-    for i, cl in enumerate(leg_cells):
-        anim = ('<animate attributeName="opacity" calcMode="discrete" values="%s" dur="0.3s" repeatCount="indefinite"/>'
-                % ("1;0" if i == 0 else "0;1"))
-        parts.append(f'<path d="{path_d(cl, 0, 0, U)}" fill="{pal["L"]}">{anim}</path>')
-    return "".join(parts)
+    frames = [frame_cells(body, lg) for lg in legs]
+    w = (max(x for f in frames for x, _ in f) + 1) * U
+    h = (max(y for f in frames for _, y in f) + 1) * U
+    parts = [f'<path d="{path_d(dilate(set(frames[0]) | set(frames[1])), 0, 0, U)}" fill="{t["card"]}"/>']
+    for i, frame in enumerate(frames):
+        paths = []
+        for key in sorted(set(frame.values())):
+            cells = {c for c, k in frame.items() if k == key}
+            colour = pal[collar if key == "c" else key]
+            paths.append(f'<path d="{path_d(cells, 0, 0, U)}" fill="{colour}"/>')
+        values = "1;0" if i == 0 else "0;1"
+        parts.append(
+            f'<g opacity="{1 - i}"><animate attributeName="opacity" calcMode="discrete" values="{values}" '
+            f'dur="0.3s" repeatCount="indefinite"/>{"".join(paths)}</g>'
+        )
+    return "".join(parts), w, h
 
 
 # ---------------------------------------------------------------- board
@@ -273,7 +280,7 @@ def build(cal: dict, theme: str):
     cells, ncols = cells_of(cal)
     walk = route(cells, ncols)
     n = len(walk)
-    steps = n + LAG * len(FOLLOWERS)
+    steps = n + LAG * len(FOLLOWER_COLLARS)
     T = INTRO + steps * STEP + OUTRO
     dur = f"{T:.3f}s"
 
@@ -345,10 +352,11 @@ def build(cal: dict, theme: str):
         )
 
     # the train: the same route for every character, delayed by LAG steps each
-    def mover(index, size_px, content):
+    def mover(index, art):
+        content, sw, sh = art
         lead = index * LAG  # steps behind the leader
-        off = (size_px - CELL) // 2
-        pts = [(X0 + c * PITCH - off, Y0 + r * PITCH - off) for c, r in walk]
+        ox, oy = (sw - CELL) // 2, (sh - CELL) // 2
+        pts = [(X0 + c * PITCH - ox, Y0 + r * PITCH - oy) for c, r in walk]
         times = [0.0] + [at(lead + i) for i in range(1, n)]
         shown_from, shown_to = at(lead), at(lead + n)
         first = f"{pts[0][0]},{pts[0][1]}"
@@ -361,9 +369,9 @@ def build(cal: dict, theme: str):
             f"{content}</g>"
         )
 
-    for k in range(len(FOLLOWERS), 0, -1):
-        body.append(mover(k, 12, sprite(MINI, MINI_LEGS, FOLLOWERS[k - 1], t)))
-    body.append(mover(0, 16, sprite(LEADER, LEADER_LEGS, None, t)))
+    for k in range(len(FOLLOWER_COLLARS), 0, -1):
+        body.append(mover(k, sprite(MINI, MINI_LEGS, FOLLOWER_COLLARS[k - 1], t)))
+    body.append(mover(0, sprite(LEADER, LEADER_LEGS, LEADER_COLLAR, t)))
 
     # footer: total and the legend
     base = Y0 + 7 * PITCH - (PITCH - CELL) + 14
@@ -377,7 +385,7 @@ def build(cal: dict, theme: str):
     body.append(text("LESS", more_x - 8 - sq - 8 - text_w("LESS", 2), base, 2, t["muted"]))
     body.append(f'<rect x="0.5" y="0.5" width="{W - 1}" height="{height - 1}" fill="none" stroke="{t["line"]}"/>')
 
-    label = (f"A small toadstool runs across my GitHub contribution calendar followed by three mini toadstools, "
+    label = (f"A small white kitten runs across my GitHub contribution calendar followed by three mini kittens, "
              f"collecting {total} contributions.")
     svg = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{height}" viewBox="0 0 {W} {height}" '
            f'shape-rendering="crispEdges" role="img" aria-label="{label}">\n<title>{label}</title>\n' + "\n".join(body) + "\n</svg>\n")
